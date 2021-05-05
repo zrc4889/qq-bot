@@ -1,0 +1,7 @@
+2021-05-05 20:07:21 | DEBUG | require modules.automatically-join-group
+2021-05-05 20:07:21 | INFO | module loading finished: modules.automatically-join-group
+2021-05-05 20:07:21 | DEBUG | require modules.twenty-translations
+2021-05-05 20:07:21 | INFO | module loading finished: modules.twenty-translations
+2021-05-05 20:07:21 | INFO | initializing app...
+2021-05-05 20:07:21 | INFO | modules.automatically-join-group::模块加载成功!!!
+2021-05-05 20:07:21 | INFO | modules.twenty-translations::模块加载成功!!!

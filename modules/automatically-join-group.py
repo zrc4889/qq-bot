@@ -8,9 +8,9 @@ from graia.application.message.chain import MessageChain
 from graia.application.event.messages import Group
 from graia.application.event.mirai import BotInvitedJoinGroupRequestEvent
 from graia.application.message.elements.internal import Plain
-__description__ = "使用谷歌翻译20次不同语言后返回"
+__description__ = "自动加入群聊"
 __author__ = "nullptr"
-__usage__ = "在群内发送 '/GT ' + 要翻译的内容 即可"
+__usage__ = "向机器人发送加入群聊邀请，自动同意"
 saya = Saya.current()
 channel = Channel.current()
 

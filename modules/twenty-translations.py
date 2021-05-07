@@ -91,7 +91,3 @@ async def formatted_output_translate(result: str):
     content = "".join(temp_output_substring)
     return MessageChain.create([Plain(text=content)])
 
-
-@channel.use(ListenerSchema(listening_events=[SayaModuleInstalled]))
-async def module_listener(event: SayaModuleInstalled):
-    logger.info(f"{event.module}::模块加载成功!!!")

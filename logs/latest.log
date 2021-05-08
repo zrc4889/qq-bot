@@ -1,0 +1,16 @@
+2021-05-08 14:01:22 | DEBUG | require modules.automatically-join-group
+2021-05-08 14:01:22 | INFO | module loading finished: modules.automatically-join-group
+2021-05-08 14:01:22 | DEBUG | require modules.twenty-translations
+2021-05-08 14:01:22 | INFO | initializing app...
+2021-05-08 20:12:40 | DEBUG | require modules.automatically-join-group
+2021-05-08 20:12:40 | INFO | module loading finished: modules.automatically-join-group
+2021-05-08 20:12:40 | DEBUG | require modules.twenty-translations
+2021-05-08 20:12:40 | INFO | initializing app...
+2021-05-08 20:13:16 | DEBUG | require modules.automatically-join-group
+2021-05-08 20:13:16 | INFO | module loading finished: modules.automatically-join-group
+2021-05-08 20:13:16 | DEBUG | require modules.twenty-translations
+2021-05-08 20:13:16 | INFO | initializing app...
+2021-05-08 20:19:16 | DEBUG | require modules.automatically-join-group
+2021-05-08 20:19:16 | INFO | module loading finished: modules.automatically-join-group
+2021-05-08 20:19:16 | DEBUG | require modules.twenty-translations
+2021-05-08 20:19:16 | INFO | initializing app...

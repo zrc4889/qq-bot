@@ -8,7 +8,6 @@ from graia.application.message.chain import MessageChain
 from graia.application.message.elements.internal import Plain
 from graia.saya import Channel, Saya
 from graia.saya.builtins.broadcast.schema import ListenerSchema
-from graia.saya.event import SayaModuleInstalled
 from loguru import logger
 
 __name__ = "twenty-translations"
@@ -90,4 +89,3 @@ async def formatted_output_translate(result: str):
     temp_output_substring = ["------翻译结果------\n\n", translated_text, "\n\n----------------\n\n"]
     content = "".join(temp_output_substring)
     return MessageChain.create([Plain(text=content)])
-

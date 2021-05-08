@@ -1,3 +1,7 @@
 graia-application-mirai
 graia-saya
 google-trans-new
+pillow
+loguru
+pyyaml
+graia-scheduler

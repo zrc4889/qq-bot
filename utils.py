@@ -1,3 +1,8 @@
+'''
+Author: nullptr
+Date: 2021-05-06 11:59:44
+LastEditTime: 2021-05-31 21:40:36
+'''
 import sys
 
 import yaml
@@ -19,29 +24,35 @@ class Config:
 
     def __init__(self, arg: str = None):
         if self.__first_init:
-            self.config = yaml.safe_load(open('config.yml', 'r', encoding='utf-8').read())
+            self.config = yaml.safe_load(
+                open('config.yml', 'r', encoding='utf-8').read())
             Config.__first_init = False
         self.arg = arg
+
+    def __str__(self):
+        return str(self.config)
+
+    def __repr__(self) -> str:
+        return self.__str__()
 
     def get(self, value):
         return self.config[value]
 
     def save(self):
-        yaml.dump(self.config, open('config.yml', 'w', encoding='utf-8'))
+        if self.config is not None:
+            with open('config.yml', 'w', encoding='utf-8') as f:
+                yaml.dump(self.config, f)
 
 
 class LoguruLogger(AbstractLogger):
-    def __init__(self) -> None:
-        config = {
-            "handlers": [
-                {"sink": sys.stdout, "format": "{time:YYYY-MM-DD HH:mm:ss} - {message}"},
-                {"sink": 'logs/latest.log', "encoding": 'utf8', "rotation": "12:00",
-                 "format": "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | {level} | <level>{message}</level>",
-                 "compression": "zip", "enqueue": True},
-            ],
-            "extra": {"user": "someone"}
-        }
-
+    def __init__(self, config: dict = None) -> None:
+        if config is None:
+            config = {
+                "handlers": [{
+                    "sink": sys.stdout,
+                    "format": "{time:YYYY-MM-DD HH:mm:ss} - {message}"
+                }]
+            }
         logger.configure(**config)
 
     def info(self, msg):

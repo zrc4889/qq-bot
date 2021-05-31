@@ -1,6 +1,10 @@
+'''
+Author: nullptr
+Date: 2021-05-11 20:17:40
+LastEditTime: 2021-05-31 21:36:31
+'''
 from typing import Union
 
-from google_trans_new import google_translator
 from graia.application import GraiaMiraiApplication
 from graia.application.event.messages import *
 from graia.application.event.messages import Group
@@ -8,7 +12,8 @@ from graia.application.message.chain import MessageChain
 from graia.application.message.elements.internal import Plain
 from graia.saya import Channel, Saya
 from graia.saya.builtins.broadcast.schema import ListenerSchema
-from loguru import logger
+from loguru import  logger
+from async_google_trans_new import google_translator
 
 __name__ = "twenty-translations"
 __description__ = "使用谷歌翻译20次不同语言后返回"
@@ -16,7 +21,6 @@ __author__ = "nullptr"
 __usage__ = "在群内发送 '/GT ' + 要翻译的内容 即可"
 saya = Saya.current()
 channel = Channel.current()
-
 channel.name(__name__)
 channel.description(f"{__description__}\n使用方法：{__usage__}")
 channel.author(__author__)
@@ -51,7 +55,7 @@ async def translation(result: str):
     res = ''
     for key in trans_dict:
         target = trans_dict[key]
-        result = translator.translate(result, lang_tgt=target)
+        result = await translator.translate(result, lang_tgt=target)
         res += key + ' -> ' + result + '\n'
         logger.debug(result)
     return res
@@ -69,7 +73,8 @@ async def group_message_listener(app: GraiaMiraiApplication, friend: Friend,
     await judge(app, friend, message)
 
 
-async def judge(app: GraiaMiraiApplication, some: Union[Friend, Group], message: MessageChain):
+async def judge(app: GraiaMiraiApplication, some: Union[Friend, Group],
+                message: MessageChain):
     message_text = message.asDisplay()
     if message_text.startswith('/GT '):
         logger.info("Get Result!")
@@ -86,6 +91,8 @@ async def judge(app: GraiaMiraiApplication, some: Union[Friend, Group], message:
 
 async def formatted_output_translate(result: str):
     translated_text = await translation(result)
-    temp_output_substring = ["------翻译结果------\n\n", translated_text, "\n\n----------------\n\n"]
+    temp_output_substring = [
+        "------翻译结果------\n\n", translated_text, "\n\n----------------\n\n"
+    ]
     content = "".join(temp_output_substring)
     return MessageChain.create([Plain(text=content)])

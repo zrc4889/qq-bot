@@ -1,7 +1,7 @@
 '''
 Author: nullptr
 Date: 2021-05-06 11:59:44
-LastEditTime: 2021-05-31 21:40:36
+LastEditTime: 2021-06-15 13:28:59
 '''
 import sys
 
@@ -24,8 +24,9 @@ class Config:
 
     def __init__(self, arg: str = None):
         if self.__first_init:
-            self.config = yaml.safe_load(
-                open('config.yml', 'r', encoding='utf-8').read())
+            self.config = yaml.safe_load(open('config.yml').read())
+            for key in (other := self.config['other']):
+                self.config.update(yaml.safe_load(open(other[key]).read()))
             Config.__first_init = False
         self.arg = arg
 
@@ -50,7 +51,10 @@ class LoguruLogger(AbstractLogger):
             config = {
                 "handlers": [{
                     "sink": sys.stdout,
-                    "format": "{time:YYYY-MM-DD HH:mm:ss} - {message}"
+                    "format":
+                    "{time:YYYY-MM-DD HH:mm:ss} - {level} - {message}",
+                    "backtrace": True,
+                    "diagnose": True
                 }]
             }
         logger.configure(**config)

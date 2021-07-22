@@ -1,7 +1,7 @@
 '''
 Author: nullptr
 Date: 2021-05-30 21:19:59
-LastEditTime: 2021-05-31 21:41:36
+LastEditTime: 2021-06-03 18:15:22
 '''
 from graia.application import GraiaMiraiApplication
 from graia.application.event.messages import *
@@ -37,11 +37,11 @@ async def group_message_listener(app: GraiaMiraiApplication, group: Group,
     if message_text := message_text[:8] == '/config' and (
             member.id == config.get("HostQQ")):
 
-        if message_text == 'save':
+        if message_text.startswith('save'):
             await app.sendGroupMessage(
                 group,
-                MessageChain.create(
-                    [At(member.id), Plain("发送 /confirm 以继续运行")]))
+                MessageChain.create([At(member.id),
+                                     Plain("发送 /confirm 以确认")]))
 
             @Waiter.create_using_function([GroupMessage])
             def waiter(event: GroupMessage, waiter_group: Group,
@@ -59,7 +59,8 @@ async def group_message_listener(app: GraiaMiraiApplication, group: Group,
 
 
 @channel.use(ListenerSchema(listening_events=[FriendMessage]))
-async def group_message_listener(friend: Friend, message: MessageChain):
+async def group_message_listener(app: GraiaMiraiApplication, friend: Friend,
+                                 message: MessageChain):
     message_text = message.asDisplay()
     if message_text.startswith('/config') and (friend.id
                                                == config.get("HostQQ")):
@@ -67,6 +68,8 @@ async def group_message_listener(friend: Friend, message: MessageChain):
         logger.info(message_text)
         logger.info('ok')
         if message_text.startswith('save'):
+            await app.sendFriendMessage(
+                friend, MessageChain.create([Plain("发送 /confirm 以确认")]))
 
             @Waiter.create_using_function([FriendMessage])
             def waiter(event: FriendMessage, waiter_friend: Friend,

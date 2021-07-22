@@ -1,10 +1,11 @@
 '''
 Author: nullptr
 Date: 2021-05-06 11:59:44
-LastEditTime: 2021-05-31 21:36:39
+LastEditTime: 2021-06-15 13:30:12
 '''
 import asyncio
 import os
+from sys import exec_prefix
 from loguru import logger
 
 from graia.application import GraiaMiraiApplication, Session
@@ -18,18 +19,17 @@ loop = asyncio.get_event_loop()
 broadcast = Broadcast(loop=loop)
 saya = Saya(broadcast)  # 这里可以置空, 但是会丢失 Lifecycle 特性
 config = Config()
-miraiConf = config.get('miraiConf')
 
 saya.install_behaviours(BroadcastBehaviour(broadcast))
 app = GraiaMiraiApplication(
     broadcast=broadcast,
     connect_info=Session(
-        host=miraiConf['miraiHost'],  # 填入 httpapi 服务运行的地址
-        authKey=miraiConf['miraiAuthKey'],  # 填入 authKey
+        host=config.get('miraiHost'),  # 填入 httpapi 服务运行的地址
+        authKey=config.get('miraiAuthKey'),  # 填入 authKey
         account=config.get('BotQQ'),  # 你的机器人的 qq 号
         websocket=True  # Graia 已经可以根据所配置的消息接收的方式来保证消息接收部分的正常运作.
     ),
-    logger=LoguruLogger(config.get('logConf')),
+    logger=LoguruLogger(config.get('log')),
 )
 
 ignore = ["__init__.py", "__pycache__"]
@@ -45,6 +45,8 @@ with saya.module_context():
                 saya.require(f"modules.{module.split('.')[0]}")
         except ModuleNotFoundError:
             pass
+        except Exception as e:
+            logger.error(e)
 
 try:
     app.launch_blocking()

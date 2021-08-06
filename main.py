@@ -1,11 +1,5 @@
-'''
-Author: nullptr
-Date: 2021-05-06 11:59:44
-LastEditTime: 2021-06-15 13:30:12
-'''
 import asyncio
 import os
-from sys import exec_prefix
 from loguru import logger
 
 from graia.application import GraiaMiraiApplication, Session

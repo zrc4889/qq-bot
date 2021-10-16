@@ -1,22 +1,26 @@
 [tool.poetry]
 name = "qq-bot"
-version = "0.0.1"
+version = "0.1.0"
 description = ""
 authors = ["nullptr <wfx.weifanxiang@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
-graia-application-mirai = "^0.19.2"
-graia-saya = "^0.0.9"
-async-google-trans-new = "^1.4.1"
-pyyaml = "^5.4.1"
-graia-scheduler = "^0.0.4"
+python = ">=3.9,<4.0"
+async-google-trans-new = "^1.4.2"
+graia-saya = "^0.0.12"
+avilla-core = "^0.0.12"
+avilla-onebot = "^0.0.7"
+graia-broadcast = "0.12.3"
+requests = "^2.26.0"
 
 [tool.poetry.dev-dependencies]
-yapf = "^0.31.0"
-pylint = "^2.8.2"
+black = {version = "^21.9b0", allow-prereleases = true}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+[[tool.poetry.source]]
+name = "tsinghua"
+url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/"
+default = true

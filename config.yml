@@ -1,8 +1,0 @@
-BotQQ: 2324523071
-HostQQ: 1958731779
-log: null
-miraiAuthKey: graia-mirai-api-http-authkey
-miraiHost: http://localhost:8080
-
-other:
-  minecraft: modules/minecraft/config.yml

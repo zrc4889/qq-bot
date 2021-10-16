@@ -114,4 +114,11 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+<<<<<<< HEAD
 .vscode/
+=======
+
+.idea/
+logs/
+config.yml
+>>>>>>> origin/master

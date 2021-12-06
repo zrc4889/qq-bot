@@ -40,9 +40,9 @@ logging.basicConfig(
 saya.install_behaviours(BroadcastBehaviour(broadcast))
 
 
-with saya.module_context():
-    saya.require("modules.twenty-translations")
-    saya.require("modules.CloudMusic")
+# with saya.module_context():
+# saya.require("modules.twenty-translations")
+# saya.require("modules.CloudMusic")
 
 
 # @broadcast.receiver("ExampleEvent")

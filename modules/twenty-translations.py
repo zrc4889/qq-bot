@@ -19,7 +19,7 @@ from avilla.core.relationship import Relationship
 from avilla.core.builtins.elements import Image, Text, Notice
 from graia.saya import Channel, Saya
 from graia.saya.builtins.broadcast.schema import ListenerSchema
-from async_google_trans_new import google_translator
+
 
 __name__ = "twenty-translations"
 __description__ = "使用谷歌翻译20次不同语言后返回"

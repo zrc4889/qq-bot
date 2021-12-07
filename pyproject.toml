@@ -6,12 +6,8 @@ authors = ["nullptr <wfx.weifanxiang@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
-async-google-trans-new = "^1.4.2"
-graia-saya = "^0.0.12"
-avilla-core = "^0.0.12"
-avilla-onebot = "^0.0.7"
-graia-broadcast = "0.12.3"
 requests = "^2.26.0"
+graia-ariadne = "^0.4.9"
 
 [tool.poetry.dev-dependencies]
 black = {version = "^21.9b0", allow-prereleases = true}

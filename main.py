@@ -1,54 +1,36 @@
-import asyncio
 import os
 from graia.saya import Saya
 from graia.saya.builtins.broadcast import BroadcastBehaviour
-
 import asyncio
-import logging
-from aiohttp.client import ClientSession
+
 from graia.broadcast import Broadcast
-from yarl import URL
-from avilla.core import Avilla
-from avilla.core.network.clients.aiohttp import AiohttpWebsocketClient
-from avilla.onebot.config import OnebotConfig, WebsocketCommunication
-from avilla.onebot.protocol import OnebotProtocol
 
-loop = asyncio.get_event_loop()
-broadcast = Broadcast(loop=loop)
-session = ClientSession(loop=loop)
+from graia.ariadne.app import Ariadne
+from graia.ariadne.message.chain import MessageChain
+from graia.ariadne.message.element import Plain
+from graia.ariadne.model import Friend, MiraiSession
 
-saya = Saya(broadcast)
-avilla = Avilla(
-    broadcast,
-    OnebotProtocol,
-    {"ws": AiohttpWebsocketClient(session)},
-    {
-        OnebotProtocol: OnebotConfig(
-            bot_id=2324523071,
-            communications={
-                "ws": WebsocketCommunication(api_root=URL("ws://127.0.0.1:6700/"))
-            },
-        )
-    },
+loop = asyncio.new_event_loop()
+
+bcc = Broadcast(loop=loop)
+saya = Saya(bcc)
+saya.install_behaviours(BroadcastBehaviour(bcc))
+app = Ariadne(
+    broadcast=bcc,
+    connect_info=MiraiSession(
+        host="http://localhost:8080",  # 填入 HTTP API 服务运行的地址
+        verify_key="graia-mirai-api-http-authkey",  # 填入 verifyKey
+        account=2324523071,  # 你的机器人的 qq 号
+    ),
 )
 
-logging.basicConfig(
-    format="[%(asctime)s][%(levelname)s]: %(message)s",
-    level=logging.INFO,
-)
 
-saya.install_behaviours(BroadcastBehaviour(broadcast))
+with saya.module_context():
+    saya.require("modules.minecraft")
 
+# @bcc.receiver("FriendMessage")
+# async def friend_message_listener(app: Ariadne, friend: Friend):
+#     await app.sendMessage(friend, MessageChain.create([Plain("Hello, World!")]))
+#     # 实际上 MessageChain.create(...) 有没有 "[]" 都没关系
 
-# with saya.module_context():
-# saya.require("modules.twenty-translations")
-# saya.require("modules.CloudMusic")
-
-
-# @broadcast.receiver("ExampleEvent")
-# async def do_something():
-#     pass
-
-
-loop.run_until_complete(avilla.launch())
-loop.run_forever()
+loop.run_until_complete(app.lifecycle())

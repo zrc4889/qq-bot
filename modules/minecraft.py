@@ -15,19 +15,13 @@ saya = Saya.current()
 channel = Channel.current()
 channel.name(__name__)
 
-class MinecraftCommand(Twilight):
-    start = ArgumentMatch("--start", "-o", action="store_true")
-    stop = ArgumentMatch("--stop", "-c", action="store_true")
-    save = FullMatch("save")
-    pass
 
 class Minecraft:
     run_status = False
     player_list = []
-    saves = []
-	
+    save_list = []
 	def __init__(self, **config = {mc_dir = "/opt/minecraft/"}):
-		saves = os.lsdir(mc_dir)
+		save_list = os.lsdir(mc_dir)
 	
     async def start_server(self):
         if self.run_status:
@@ -50,11 +44,20 @@ class Minecraft:
     async def save(self, operator):
     	if operator == "list":
     		result = "当前服务器有：\n"
-            result += '\n'.join(list)
+            result += '\n'.join(self.save_list)
             return result
 
     	elif operator == "switch":
-    		pass
+            if self.run_status:
+                return "服务器正在运行！请先关闭服务器！"
+    		save = operator[6:]
+            if save in self.save_list:
+                try:
+                    subprocess.run(["tmux", "send", "-t", "cd", "../{}".format(save), "ENTER"])
+                except:
+                    return "切换存档失败！"
+                finally:
+                    return "切换成功！"
     	
     	
 
@@ -75,11 +78,7 @@ class Minecraft:
 minecraft = Minecraft()
 
 
-@channel.use(ListenerSchema(listening_events=[MessageEvent], dispatchers=[
-    Twilight(
-        [FullMatch(".command")],
-        {"arg": RegexMatch(r"\d+", optional=True)}
-)]))
+@channel.use(ListenerSchema(listening_events=[MessageEvent]))
 async def event_receiver(
     app: Ariadne, message: MessageChain, group: Group, sender: Member
 ):

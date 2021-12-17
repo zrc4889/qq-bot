@@ -20,9 +20,10 @@ class Minecraft:
     run_status = False
     player_list = []
     save_list = []
+
     def __init__(self, config: dict = {"mc_dir": "/opt/minecraft/"}):
         save_list = os.lsdir(config["mc_dir"] + "saves")
-	
+
     async def start_server(self):
         if self.run_status:
             return False
@@ -40,12 +41,12 @@ class Minecraft:
         finally:
             self.run_status = False
             return True
-            
+
     async def save(self, operator):
-        
-    	if operator == "list":
+
+        if operator == "list":
             result = "当前服务器有：\n"
-            result = '\n'.join(self.save_list)
+            result = "\n".join(self.save_list)
             return result
         elif operator == "switch":
             if self.run_status:
@@ -53,13 +54,13 @@ class Minecraft:
             save = operator[6:]
             if save in self.save_list:
                 try:
-                    subprocess.run(["tmux", "send", "-t", "cd", "../{}".format(save), "ENTER"])
+                    subprocess.run(
+                        ["tmux", "send", "-t", "cd", "../{}".format(save), "ENTER"]
+                    )
                 except:
                     return "切换存档失败！"
                 finally:
                     return "切换成功！"
-    	
-    	
 
     async def judge(self, message: str) -> str:
         if message == "start":
@@ -86,6 +87,9 @@ async def event_receiver(
         await app.sendMessage(
             group,
             MessageChain.create(
-                [At(sender.id), Plain(await minecraft.judge(message.asDisplay()[4:].strip()))]
+                [
+                    At(sender.id),
+                    Plain(await minecraft.judge(message.asDisplay()[4:].strip())),
+                ]
             ),
         )

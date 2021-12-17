@@ -1,6 +1,6 @@
 from graia.saya import Saya, Channel
 from graia.saya.builtins.broadcast.schema import ListenerSchema
-
+from loguru import logger
 
 from graia.ariadne.message.element import Plain
 from graia.ariadne.model import Group, Member
@@ -47,6 +47,7 @@ class Minecraft:
         if operator == "list":
             result = "当前服务器有：\n"
             result = "\n".join(self.save_list)
+            logger.debug(result)
             return result
         elif operator == "switch":
             if self.run_status:

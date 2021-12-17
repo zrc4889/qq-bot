@@ -20,8 +20,8 @@ class Minecraft:
     run_status = False
     player_list = []
     save_list = []
-	def __init__(self, **config = {mc_dir = "/opt/minecraft/"}):
-		save_list = os.lsdir(mc_dir)
+    def __init__(self, config: dict = {"mc_dir": "/opt/minecraft/"}):
+        save_list = os.lsdir(config["mc_dir"] + "saves")
 	
     async def start_server(self):
         if self.run_status:
@@ -42,15 +42,15 @@ class Minecraft:
             return True
             
     async def save(self, operator):
+        
     	if operator == "list":
-    		result = "当前服务器有：\n"
-            result += '\n'.join(self.save_list)
+            result = "当前服务器有：\n"
+            result = '\n'.join(self.save_list)
             return result
-
-    	elif operator == "switch":
+        elif operator == "switch":
             if self.run_status:
                 return "服务器正在运行！请先关闭服务器！"
-    		save = operator[6:]
+            save = operator[6:]
             if save in self.save_list:
                 try:
                     subprocess.run(["tmux", "send", "-t", "cd", "../{}".format(save), "ENTER"])
@@ -61,7 +61,7 @@ class Minecraft:
     	
     	
 
-    async def judge(self, message: str) -> str`:
+    async def judge(self, message: str) -> str:
         if message == "start":
             return "已开启" if await self.start_server() else "启动失败"
         elif message == "stop":
@@ -70,7 +70,7 @@ class Minecraft:
         elif message == "status":
             return "当前服务器开启状态为：" + str(self.run_status)
         elif message.startwith("saves "):
-        	return await self.swtich_save(message[6:])
+            return await self.swtich_save(message[6:])
         else:
             return "服务器暂时不支持这个命令"
 
@@ -78,7 +78,7 @@ class Minecraft:
 minecraft = Minecraft()
 
 
-@channel.use(ListenerSchema(listening_events=[MessageEvent]))
+@channel.use(ListenerSchema(listening_events=[GroupMessage]))
 async def event_receiver(
     app: Ariadne, message: MessageChain, group: Group, sender: Member
 ):

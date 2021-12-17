@@ -42,7 +42,7 @@ class Minecraft:
             self.run_status = False
             return True
 
-    async def save(self, operator):
+    async def save(self, operator: str) -> str:
 
         if operator == "list":
             result = "当前服务器有：\n"
@@ -61,6 +61,7 @@ class Minecraft:
                     return "切换存档失败！"
                 finally:
                     return "切换成功！"
+        return "命令错误"
 
     async def judge(self, message: str) -> str:
         if message == "start":
@@ -70,8 +71,8 @@ class Minecraft:
             return "已关闭" if await self.stop_server() else "关闭失败"
         elif message == "status":
             return "当前服务器开启状态为：" + str(self.run_status)
-        elif message.startwith("saves "):
-            return await self.swtich_save(message[6:])
+        elif message.startswith("saves "):
+            return await self.save(message[6:])
         else:
             return "服务器暂时不支持这个命令"
 

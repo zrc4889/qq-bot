@@ -56,7 +56,14 @@ class Minecraft:
             if save in self.save_list:
                 try:
                     subprocess.run(
-                        ["tmux", "send", "-t", "minecraft", "cd", "../{}".format(save), "ENTER"]
+                        [
+                            "tmux",
+                            "send",
+                            "-t",
+                            "minecraft",
+                            "cd ../{}".format(save),
+                            "ENTER",
+                        ]
                     )
                 except:
                     return "切换存档失败！"

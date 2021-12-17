@@ -49,7 +49,7 @@ class Minecraft:
             result += "\n".join(self.save_list)
             logger.debug(result)
             return result
-        elif operator == "switch":
+        elif operator.startswith("switch"):
             if self.run_status:
                 return "服务器正在运行！请先关闭服务器！"
             save = operator[6:]

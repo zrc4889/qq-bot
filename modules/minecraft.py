@@ -52,11 +52,11 @@ class Minecraft:
         elif operator.startswith("switch"):
             if self.run_status:
                 return "服务器正在运行！请先关闭服务器！"
-            save = operator[6:]
+            save = operator[7:]
             if save in self.save_list:
                 try:
                     subprocess.run(
-                        ["tmux", "send", "-t", "cd", "../{}".format(save), "ENTER"]
+                        ["tmux", "send", "-t", "minecraft", "cd", "../{}".format(save), "ENTER"]
                     )
                 except:
                     return "切换存档失败！"

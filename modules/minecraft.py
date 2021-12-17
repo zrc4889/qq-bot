@@ -21,8 +21,8 @@ class Minecraft:
     player_list = []
     save_list = []
 
-    def __init__(self, config: dict = {"mc_dir": "/opt/minecraft/"}):
-        save_list = os.listdir(config["mc_dir"])
+    def __init__(self, config: dict = {"mc_dir": "~/minecraft/"}):
+        self.save_list = os.listdir(config["mc_dir"])
 
     async def start_server(self):
         if self.run_status:
@@ -46,7 +46,7 @@ class Minecraft:
 
         if operator == "list":
             result = "当前服务器有：\n"
-            result = "\n".join(self.save_list)
+            result += "\n".join(self.save_list)
             logger.debug(result)
             return result
         elif operator == "switch":
@@ -78,7 +78,8 @@ class Minecraft:
             return "服务器暂时不支持这个命令"
 
 
-minecraft = Minecraft()
+minecraft = Minecraft(config={"mc_dir": "/opt/minecraft/"})
+minecraft.save_list
 
 
 @channel.use(ListenerSchema(listening_events=[GroupMessage]))

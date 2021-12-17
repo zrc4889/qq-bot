@@ -22,7 +22,7 @@ class Minecraft:
     save_list = []
 
     def __init__(self, config: dict = {"mc_dir": "/opt/minecraft/"}):
-        save_list = os.lsdir(config["mc_dir"] + "saves")
+        save_list = os.listdir(config["mc_dir"] + "saves")
 
     async def start_server(self):
         if self.run_status:

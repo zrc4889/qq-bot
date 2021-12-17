@@ -20,9 +20,26 @@ class Minecraft:
     run_status = False
     player_list = []
     save_list = []
+    now_save = ""
 
-    def __init__(self, config: dict = {"mc_dir": "~/minecraft/"}):
+    def __init__(
+        self, config: dict = {"mc_dir": "~/minecraft/", "default": "minecraft"}
+    ):
+        self.run_status = True
+        self.config = config
         self.save_list = os.listdir(config["mc_dir"])
+        self.now_save = config["default"]
+        subprocess.run(
+            [
+                "tmux",
+                "send",
+                "-t",
+                "minecraft",
+                "cd ../{}".format(config["default"]),
+                "ENTER",
+            ]
+        )
+        subprocess.run(["tmux", "send", "-t", "minecraft", "./start.sh", "ENTER"])
 
     async def start_server(self):
         if self.run_status:
@@ -42,6 +59,27 @@ class Minecraft:
             self.run_status = False
             return True
 
+    async def switch(self, save: str):
+        if save in self.save_list:
+            try:
+                subprocess.run(
+                    [
+                        "tmux",
+                        "send",
+                        "-t",
+                        "minecraft",
+                        "cd ../{}".format(save),
+                        "ENTER",
+                    ]
+                )
+            except:
+                return "切换存档失败！"
+            finally:
+                self.now_save = save
+                return "切换成功！"
+
+        return "存档不存在！"
+
     async def save(self, operator: str) -> str:
 
         if operator == "list":
@@ -52,23 +90,7 @@ class Minecraft:
         elif operator.startswith("switch"):
             if self.run_status:
                 return "服务器正在运行！请先关闭服务器！"
-            save = operator[7:]
-            if save in self.save_list:
-                try:
-                    subprocess.run(
-                        [
-                            "tmux",
-                            "send",
-                            "-t",
-                            "minecraft",
-                            "cd ../{}".format(save),
-                            "ENTER",
-                        ]
-                    )
-                except:
-                    return "切换存档失败！"
-                finally:
-                    return "切换成功！"
+            return await self.switch(operator[7:])
         return "命令错误"
 
     async def judge(self, message: str) -> str:
@@ -85,8 +107,7 @@ class Minecraft:
             return "服务器暂时不支持这个命令"
 
 
-minecraft = Minecraft(config={"mc_dir": "/opt/minecraft/"})
-minecraft.save_list
+minecraft = Minecraft(config={"mc_dir": "/opt/minecraft/", "default": "hardcores"})
 
 
 @channel.use(ListenerSchema(listening_events=[GroupMessage]))
